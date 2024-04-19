@@ -86,8 +86,7 @@ def jiraissue(projectid,issuetitle, issuedescription, labels,assigneeid):
     payload = json.dumps( {
     "fields": {
         "assignee": {
-            #"name":"mikko.hammar@fintraffic.fi"
-            #"id": "63eb67d407df05aa8275bdef"
+            
             "id": assigneeid
         },
 
