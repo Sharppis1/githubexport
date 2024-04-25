@@ -13,6 +13,8 @@ Functions
 def parselabels(array):
     labels = []
     labels.append("Github")
+    labels.append(str(cr.repo))
+
     for label in array:
         labels.append(label["name"])
     return labels
@@ -28,6 +30,21 @@ def jiradate(issuedate):
         print("failure", error)
 
     return newdate
+
+def parsecomments(comments):
+    if not comments:
+        return "No comments"
+    else:
+        commentstring = ""
+        for comment in comments:
+            #print(comment["created_at"])
+            commentstring += comment["created_at"]
+            commentstring += "\n"
+            #print(comment["body"])
+            commentstring += comment["body"]
+            commentstring += "\n \n"
+        return commentstring
+
     
 def sanitizingissuebody(bodymessage,url):
     if bodymessage == None:
@@ -86,8 +103,6 @@ def jiraissue(projectid,issuetitle, issuedescription, labels,assigneeid):
     payload = json.dumps( {
     "fields": {
         "assignee": {
-            #"name":"mikko.hammar@fintraffic.fi"
-            #"id": "63eb67d407df05aa8275bdef"
             "id": assigneeid
         },
 
@@ -131,9 +146,44 @@ def jiraissue(projectid,issuetitle, issuedescription, labels,assigneeid):
 
     returnmessage = json.loads(response.text)
     print(json.dumps(json.loads(response.text), sort_keys=True, indent=4, separators=(",", ": ")))
+    return returnmessage["key"] 
 
-def addcomments(jiraissueid):
-    TODO
-    url = "https://"+cr.jiradomain+".atlassian.net/rest/api/3/issue/"+jiraissueid+"/comment"
-    print(url)
+def addcomments(jiraissueid,jiracomment):
+
+    url = "https://"+str(cr.jiradomain)+".atlassian.net/rest/api/3/issue/"+str(jiraissueid)+"/comment"
+
+    auth = HTTPBasicAuth(cr.jirausername, cr.jiraapitoken)
+
+    headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json"
+    }
+
+    payload = json.dumps( {
+    "body": {
+        "content": [
+        {
+            "content": [
+            {
+                "text": jiracomment,
+                "type": "text"
+            }
+            ],
+            "type": "paragraph"
+        }
+        ],
+        "type": "doc",
+        "version": 1
+    }
+    } )
+
+    response = requests.request(
+    "POST",
+    url,
+    data=payload,
+    headers=headers,
+    auth=auth
+    )
+
+    print(json.dumps(json.loads(response.text), sort_keys=True, indent=4, separators=(",", ": ")))
 
