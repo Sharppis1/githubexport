@@ -103,6 +103,7 @@ def jiraissue(projectid,issuetitle, issuedescription, labels,assigneeid):
     payload = json.dumps( {
     "fields": {
         "assignee": {
+            
             "id": assigneeid
         },
 
