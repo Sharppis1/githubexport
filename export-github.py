@@ -48,13 +48,13 @@ try:
         issuebody = egf.sanitizingissuebody(issue["body"], issue["html_url"])
         
         try:
-            jiraissueid = egf.jiraissue(cr.projectid,issue["title"],issuebody, egf.parselabels(issue["labels"]), cr.assigneeid(issue["assignees"]))
+            #jiraissueid = egf.jiraissue(cr.projectid,issue["title"],issuebody, egf.parselabels(issue["labels"]), cr.assigneeid(issue["assignees"]))
             
-            comments = json.loads(gh_session.get(issue["comments_url"]).text)
+            #comments = json.loads(gh_session.get(issue["comments_url"]).text)
             
             print(egf.parsecomments(comments))
 
-            egf.addcomments(jiraissueid,egf.parsecomments(comments))
+            #egf.addcomments(jiraissueid,egf.parsecomments(comments))
             
 
         except Exception as error:

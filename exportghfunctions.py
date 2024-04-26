@@ -6,7 +6,7 @@ from requests.auth import HTTPBasicAuth
 import credentials as cr
 
 '''
-Functions
+Functions for github
 '''        
 
 # same with labels
